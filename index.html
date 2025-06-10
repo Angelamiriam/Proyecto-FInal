@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interpolación - Aplicaciones Reales</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="style.css" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="text-center py-4">
+    <h1 class="display-4 text-uppercase fw-bold">Interpolación - Aplicaciones del Mundo Real</h1>
+    <nav class="navbar navbar-expand-lg mx-auto mt-4" style="max-width: 950px;">
+      <div class="container-fluid justify-content-center gap-5">
+        <a class="nav-link" href="#theory-section"><i class="fas fa-book"></i> Teoría</a>
+        <a class="nav-link" href="#app1"><i class="fas fa-cloud"></i> Clima</a>
+        <a class="nav-link" href="#app2"><i class="fas fa-chart-line"></i> Economía</a>
+        <a class="nav-link" href="#app3"><i class="fas fa-cogs"></i> Ingeniería</a>
+        <a class="nav-link" href="#contact-form-section"><i class="fas fa-envelope"></i> Contacto</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container py-5">
+    <section id="theory-section">
+      <h2 class="text-center mb-4">¿Qué es la Interpolación y Por Qué Es Importante?</h2>
+      <p class="lead text-center">La **interpolación** es el arte y la ciencia de estimar valores desconocidos que se encuentran *entre* un conjunto de puntos de datos conocidos. Imagina que solo tienes unas pocas fotos de un proceso a lo largo del tiempo; la interpolación te permite crear una película fluida, rellenando los momentos que no capturaste directamente.</p>
+      <p>Es una técnica fundamental en diversas disciplinas porque los datos rara vez son continuos y completos. Nos permite hacer inferencias razonables, suavizar conjuntos de datos, y preparar la información para el modelado y la visualización. En esencia, la interpolación nos da un "superpoder" para ver el mundo con mayor detalle a partir de información limitada.</p>
+
+      <h3>Métodos Comunes de Interpolación:</h3>
+      <ul>
+        <li>
+          <strong>Interpolación Lineal:</strong> Es el método más simple. Conecta dos puntos de datos adyacentes con una línea recta. Es rápida y fácil de calcular, ideal para cuando se necesita una estimación rápida y los cambios entre los puntos son relativamente suaves o se asume una relación lineal.
+          <br>
+          <a href="https://www.youtube.com/watch?v=S7-P_3k56b0" target="_blank" class="video-link"><i class="fab fa-youtube"></i> Ver Video (Lineal)</a>
+        </li>
+        <li>
+          <strong>Interpolación Polinomial de Lagrange:</strong> Construye un único polinomio que pasa exactamente por todos los puntos de datos dados. Este método es elegante y conceptualmente sencillo, pero puede volverse computacionalmente costoso y propenso a oscilaciones (efecto de Runge) si hay muchos puntos o si los datos tienen patrones complejos. Es excelente para un número moderado de puntos.
+          <br>
+          <a href="https://www.youtube.com/watch?v=sS_wP_6Z29A" target="_blank" class="video-link"><i class="fab fa-youtube"></i> Ver Video (Lagrange)</a>
+        </li>
+        <li>
+          <strong>Interpolación de Newton (Diferencias Divididas):</strong> Similar a Lagrange en que también construye un polinomio que pasa por todos los puntos. Sin embargo, lo hace de una manera más eficiente y modular, donde agregar un nuevo punto de datos solo requiere calcular un nuevo término, sin recalcular todo el polinomio desde cero. Es robusta y flexible para diferentes conjuntos de datos.
+          <br>
+          <a href="https://www.youtube.com/watch?v=t5J5s-j1z9U" target="_blank" class="video-link"><i class="fab fa-youtube"></i> Ver Video (Newton)</a>
+        </li>
+      </ul>
+      <p class="text-center mt-4 lead">La elección del método depende de la naturaleza de los datos, el número de puntos disponibles y la precisión requerida. Cada uno tiene sus fortalezas y limitaciones, pero todos comparten el objetivo de dar sentido a lo que está "entre" nuestras mediciones.</p>
+    </section>
+
+    <hr>
+
+    <section id="app1">
+      <h2 class="text-warning mb-4">1. Predicción de Temperatura (Clima)</h2>
+      <p class="lead">La interpolación es una herramienta mágica para **predecir temperaturas** en cualquier lugar sin estaciones meteorológicas o en cualquier momento entre mediciones. Imagina que tienes solo unos pocos puntos de datos de temperatura a lo largo del día; la interpolación nos permite trazar una curva suave, revelando cómo cambia la temperatura en cada instante no medido.</p>
+      <div class="mb-3">
+        <label for="methodClima" class="form-label text-light">Seleccionar método:</label>
+        <select class="form-select form-control-custom" id="methodClima">
+          <option value="lagrange" selected>Lagrange</option>
+          <option value="newton">Newton (Diferencias Divididas)</option>
+          <option value="linear">Lineal</option>
+        </select>
+      </div>
+      <span class="method-label" id="currentMethodClima">Método actual: Interpolación de Lagrange</span>
+      
+      <!-- New Form for Clima -->
+      <div class="mb-4">
+        <label class="form-label text-light">Ingrese pares de datos (X=Tiempo, Y=Temperatura):</label>
+        <div id="dataInputsClima" class="data-input-wrapper">
+          <!-- Initial rows will be added by JS -->
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-secondary-custom" type="button" onclick="addRow('clima')"><i class="fas fa-plus"></i> Añadir Fila</button>
+          <button class="btn btn-secondary-custom" type="button" onclick="removeRow('clima')"><i class="fas fa-minus"></i> Eliminar Última Fila</button>
+          <button class="btn btn-secondary-custom" type="button" onclick="resetRows('clima')"><i class="fas fa-redo"></i> Resetear Datos</button>
+        </div>
+        <button class="btn btn-primary mt-3" type="button" onclick="interpolar('clima')">Interpolar</button>
+      </div>
+      
+      <canvas id="graficaClima"></canvas>
+      <div id="resultsTableContainerClima" class="results-table-container d-none"></div>
+      <p class="conclusion-text">
+        **¡La interpolación es tu superpoder meteorológico!** 🌪️ Transforma simples lecturas de termómetros en una comprensión continua del clima. Desde trazar la fluctuación de la temperatura a lo largo del día hasta llenar los huecos en los datos de un sensor remoto, esta técnica te permite **visualizar y analizar el mundo como nunca antes**. ¿Necesitas una estimación veloz y directa? La **interpolación lineal** es tu aliada. Pero si buscas desentrañar la verdadera danza de la temperatura, con todas sus inflexiones y sutilezas, los métodos de **Lagrange** o **Newton** te revelarán la curva más fiel. Dominar la interpolación no solo es calcular; es **ver el invisible latido del clima**, haciendo los pronósticos más inteligentes y las decisiones más nítidas. Recuerda: es la ventana al *ahora* y al *pasado inmediato*, ¡no la bola de cristal del mañana!
+      </p>
+    </section>
+
+    <hr>
+
+    <section id="app2">
+      <h2 class="text-warning mb-4">2. Proyección de Precios (Economía)</h2>
+      <p class="lead">¿Alguna vez te has preguntado cómo los analistas financieros estiman el valor de un activo o producto en una fecha donde no hubo una cotización exacta? La interpolación es su arma secreta. Usando datos históricos, podemos **"rellenar los vacíos" en el tiempo** y proyectar precios en fechas intermedias. Esto es crucial para un análisis de mercado profundo y para tomar decisiones financieras con más confianza.</p>
+      <div class="mb-3">
+        <label for="methodEconomia" class="form-label text-light">Seleccionar método:</label>
+        <select class="form-select form-control-custom" id="methodEconomia">
+          <option value="lagrange" selected>Lagrange</option>
+          <option value="newton">Newton (Diferencias Divididas)</option>
+          <option value="linear">Lineal</option>
+        </select>
+      </div>
+      <span class="method-label" id="currentMethodEconomia">Método actual: Interpolación de Lagrange</span>
+      
+      <!-- New Form for Economia -->
+      <div class="mb-4">
+        <label class="form-label text-light">Ingrese pares de datos (X=Año, Y=Precio):</label>
+        <div id="dataInputsEconomia" class="data-input-wrapper">
+          <!-- Initial rows will be added by JS -->
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-secondary-custom" type="button" onclick="addRow('economia')"><i class="fas fa-plus"></i> Añadir Fila</button>
+          <button class="btn btn-secondary-custom" type="button" onclick="removeRow('economia')"><i class="fas fa-minus"></i> Eliminar Última Fila</button>
+          <button class="btn btn-secondary-custom" type="button" onclick="resetRows('economia')"><i class="fas fa-redo"></i> Resetear Datos</button>
+        </div>
+        <button class="btn btn-primary mt-3" type="button" onclick="interpolar('economia')">Interpolar</button>
+      </div>
+
+      <canvas id="graficaEconomia"></canvas>
+      <div id="resultsTableContainerEconomia" class="results-table-container d-none"></div>
+      <p class="conclusion-text">
+        **¡La interpolación es tu brújula financiera!** 📈 En el frenético universo de la economía, esta técnica es la que te permite **decodificar el pasado y el presente de los precios**, rellenando los vacíos y construyendo un mapa de cómo se mueven los mercados. Es esencial para cualquier analista que busque tendencias, valoraciones de activos o simplemente una comprensión más profunda del comportamiento económico. Pero aquí reside la clave: la interpolación te da una visión cristalina *entre* tus puntos de datos; **no es una varita mágica para predecir el futuro incierto**. Extrapolar es una jugada de alto riesgo. Ya sea que optes por la sencillez de la **interpolación lineal** para una aproximación rápida o por la precisión de **Lagrange/Newton** para una curva de precios más detallada, esta herramienta te empodera para **comprender el mercado**, no para adivinarlo. ¡Analiza con confianza, pero invierte con cautela!
+      </p>
+    </section>
+
+    <hr>
+
+    <section id="app3">
+      <h2 class="text-warning mb-4">3. Sensorización en Ingeniería</h2>
+      <p class="lead">Los sensores en sistemas de ingeniería (como tuberías, motores o estructuras) nos dan mediciones en puntos específicos. Pero, ¿qué ocurre entre esos puntos? La interpolación es la clave para **inferir valores continuos** de variables como la temperatura, presión o estrés, creando un **"mapa" completo del comportamiento del sistema**. Esto es indispensable para un monitoreo preciso, un control eficiente y una optimización de procesos inigualable.</p>
+      <div class="mb-3">
+        <label for="methodIngenieria" class="form-label text-light">Seleccionar método:</label>
+        <select class="form-select form-control-custom" id="methodIngenieria">
+          <option value="lagrange" selected>Lagrange</option>
+          <option value="newton">Newton (Diferencias Divididas)</option>
+          <option value="linear">Lineal</option>
+        </select>
+      </div>
+      <span class="method-label" id="currentMethodIngenieria">Método actual: Interpolación de Lagrange</span>
+      
+      <!-- New Form for Ingenieria -->
+      <div class="mb-4">
+        <label class="form-label text-light">Ingrese pares de datos (X=Posición, Y=Temperatura):</label>
+        <div id="dataInputsIngenieria" class="data-input-wrapper">
+          <!-- Initial rows will be added by JS -->
+        </div>
+        <div class="d-flex gap-2 mt-3">
+          <button class="btn btn-secondary-custom" type="button" onclick="addRow('ingenieria')"><i class="fas fa-plus"></i> Añadir Fila</button>
+          <button class="btn btn-secondary-custom" type="button" onclick="removeRow('ingenieria')"><i class="fas fa-minus"></i> Eliminar Última Fila</button>
+          <button class="btn btn-secondary-custom" type="button" onclick="resetRows('ingenieria')"><i class="fas fa-redo"></i> Resetear Datos</button>
+        </div>
+        <button class="btn btn-primary mt-3" type="button" onclick="interpolar('ingenieria')">Interpolar</button>
+      </div>
+
+      <canvas id="graficaIngenieria"></canvas>
+      <div id="resultsTableContainerIngenieria" class="results-table-container d-none"></div>
+      <p class="conclusion-text">
+        **¡La interpolación es el corazón de la ingeniería inteligente!** ⚙️ En un mundo donde los datos de sensores son la sangre de cualquier sistema, esta técnica es el motor que transforma lecturas discretas en una **imagen viva y detallada** del comportamiento de tu equipo o estructura. Permite a los ingenieros diseñar, optimizar y prever con una precisión asombrosa. Desde la **interpolación lineal** para una respuesta ágil y directa, hasta los polinomios intrincados de **Lagrange** o **Newton** que capturan la más mínima fluctuación, elegir el método adecuado es clave para el éxito. Esta herramienta no es solo un cálculo; es la base para **construir soluciones tecnológicas robustas**, asegurar la eficiencia y la seguridad, e impulsar el progreso. ¡Con la interpolación, cada punto de dato cuenta una historia completa!
+      </p>
+    </section>
+  </main>
+
+  <hr>
+
+  <section id="contact-form-section" class="container py-5">
+    <h2 class="text-center mb-4"><i class="fas fa-envelope"></i> ¿Tienes Consultas o Sugerencias?</h2>
+    <p class="lead text-center text-light">¡Nos encantaría escucharte! Envíanos tus comentarios, preguntas o ideas.</p>
+    <form>
+      <div class="mb-3">
+        <label for="contactName" class="form-label">Nombre:</label>
+        <input type="text" class="form-control form-control-custom" id="contactName" placeholder="Tu nombre" required>
+      </div>
+      <div class="mb-3">
+        <label for="contactEmail" class="form-label">Email:</label>
+        <input type="email" class="form-control form-control-custom" id="contactEmail" placeholder="tu.email@ejemplo.com" required>
+      </div>
+      <div class="mb-3">
+        <label for="contactSubject" class="form-label">Asunto:</label>
+        <input type="text" class="form-control form-control-custom" id="contactSubject" placeholder="Asunto de tu mensaje">
+      </div>
+      <div class="mb-3">
+        <label for="contactMessage" class="form-label">Mensaje:</label>
+        <textarea class="form-control form-control-custom" id="contactMessage" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+      </div>
+    </form>
+  </section>
+
+  <footer class="text-center py-4">
+    <p>&copy; 2025 - Numerical Methods by Angela Miriam Chambi Loza</p>
+  </footer>
+
+  <script>
+    // Object to hold chart instances
+    const charts = {};
+
+    // Map application names to their data input containers
+    const dataInputContainers = {
+        clima: 'dataInputsClima',
+        economia: 'dataInputsEconomia',
+        ingenieria: 'dataInputsIngenieria'
+    };
+
+    // Initialize with two input rows for each application
+    document.addEventListener('DOMContentLoaded', () => {
+        Object.keys(dataInputContainers).forEach(app => {
+            addRow(app);
+            addRow(app);
+            // Add some initial example values for a smoother start
+            if (app === 'clima') {
+                document.querySelector(`#${dataInputContainers[app]} input[name="x_val"]`).value = '1';
+                document.querySelector(`#${dataInputContainers[app]} input[name="y_val"]`).value = '10';
+                document.querySelector(`#${dataInputContainers[app]} .data-input-row:nth-child(2) input[name="x_val"]`).value = '5';
+                document.querySelector(`#${dataInputContainers[app]} .data-input-row:nth-child(2) input[name="y_val"]`).value = '12';
+            } else if (app === 'economia') {
+                document.querySelector(`#${dataInputContainers[app]} input[name="x_val"]`).value = '2000';
+                document.querySelector(`#${dataInputContainers[app]} input[name="y_val"]`).value = '50';
+                document.querySelector(`#${dataInputContainers[app]} .data-input-row:nth-child(2) input[name="x_val"]`).value = '2010';
+                document.querySelector(`#${dataInputContainers[app]} .data-input-row:nth-child(2) input[name="y_val"]`).value = '80';
+            } else if (app === 'ingenieria') {
+                document.querySelector(`#${dataInputContainers[app]} input[name="x_val"]`).value = '0';
+                document.querySelector(`#${dataInputContainers[app]} input[name="y_val"]`).value = '25';
+                document.querySelector(`#${dataInputContainers[app]} .data-input-row:nth-child(2) input[name="x_val"]`).value = '10';
+                document.querySelector(`#${dataInputContainers[app]} .data-input-row:nth-child(2) input[name="y_val"]`).value = '30';
+            }
+        });
+    });
+
+    function addRow(app) {
+        const container = document.getElementById(dataInputContainers[app]);
+        const newRow = document.createElement('div');
+        newRow.classList.add('data-input-row');
+        newRow.innerHTML = `
+            <input type="number" step="any" class="form-control form-control-custom" name="x_val" placeholder="X">
+            <input type="number" step="any" class="form-control form-control-custom" name="y_val" placeholder="Y">
+        `;
+        container.appendChild(newRow);
+        container.scrollTop = container.scrollHeight; // Scroll to bottom
+    }
+
+    function removeRow(app) {
+        const container = document.getElementById(dataInputContainers[app]);
+        if (container.children.length > 2) { // Ensure at least 2 rows remain
+            container.removeChild(container.lastChild);
+        } else {
+            alert('Necesitas al menos dos pares de puntos para interpolar.');
+        }
+    }
+
+    function resetRows(app) {
+        const container = document.getElementById(dataInputContainers[app]);
+        container.innerHTML = ''; // Clear all rows
+        addRow(app); // Add back two empty rows
+        addRow(app);
+    }
+
+    function getDataFromForm(app) {
+        const container = document.getElementById(dataInputContainers[app]);
+        const x = [];
+        const y = [];
+        const xValuesSet = new Set(); // To check for duplicate X values
+
+        let hasEmptyField = false;
+        let hasInvalidNumber = false;
+        let hasDuplicateX = false;
+        
+        container.querySelectorAll('.data-input-row').forEach(row => {
+            const xInput = row.querySelector('input[name="x_val"]');
+            const yInput = row.querySelector('input[name="y_val"]');
+
+            if (xInput.value.trim() === '' || yInput.value.trim() === '') {
+                hasEmptyField = true;
+                return; 
+            }
+
+            const xVal = Number(xInput.value);
+            const yVal = Number(yInput.value);
+
+            if (isNaN(xVal) || isNaN(yVal)) {
+                hasInvalidNumber = true;
+                return; 
+            }
+
+            if (xValuesSet.has(xVal)) {
+                hasDuplicateX = true;
+                return; 
+            }
+            xValuesSet.add(xVal);
+
+            x.push(xVal);
+            y.push(yVal);
+        });
+
+        if (hasEmptyField) {
+            alert('Por favor, asegúrese de que todos los campos de entrada estén llenos o elimine las filas vacías.');
+            return { x: [], y: [] };
+        }
+        if (hasInvalidNumber) {
+            alert('Por favor, ingrese solo números válidos en los campos de X e Y.');
+            return { x: [], y: [] };
+        }
+        if (hasDuplicateX) {
+            alert('Error: Se encontraron valores de X duplicados. Los valores de X deben ser únicos para la interpolación.');
+            return { x: [], y: [] };
+        }
+        if (x.length < 2) {
+            alert('Necesitas al menos dos pares de puntos para interpolar.');
+            return { x: [], y: [] };
+        }
+
+        return { x, y };
+    }
+
+    // --- Interpolation Methods ---
+
+    function lagrange(x, y, xi) {
+      let result = 0;
+      for (let i = 0; i < x.length; i++) {
+        let term = y[i];
+        for (let j = 0; j < x.length; j++) {
+          if (j !== i) {
+            term *= (xi - x[j]) / (x[i] - x[j]);
+          }
+        }
+        result += term;
+      }
+      return result;
+    }
+
+    function linearInterpolation(x, y, xi) {
+        if (x.length < 2) return NaN;
+
+        const sortedPairs = x.map((val, i) => ({ x: val, y: y[i] })).sort((a, b) => a.x - b.x);
+        x = sortedPairs.map(p => p.x);
+        y = sortedPairs.map(p => p.y);
+
+        if (xi < x[0]) {
+             if (x[1] - x[0] === 0) return y[0];
+             return y[0] + (xi - x[0]) * (y[1] - y[0]) / (x[1] - x[0]);
+        }
+        if (xi > x[x.length - 1]) {
+             if (x[x.length - 1] - x[x.length - 2] === 0) return y[x.length - 1];
+             return y[x.length - 1] + (xi - x[x.length - 1]) * (y[x.length - 1] - y[x.length - 2]) / (x[x.length - 1] - x[x.length - 2]);
+        }
+        
+        let k = 0;
+        while (k < x.length - 1 && x[k+1] < xi) {
+            k++;
+        }
+
+        if (xi === x[k]) return y[k];
+        
+        if (x[k+1] - x[k] === 0) return y[k];
+        return y[k] + (xi - x[k]) * (y[k+1] - y[k]) / (x[k+1] - x[k]);
+    }
+
+    function newtonDividedDifferences(x, y, xi) {
+        const n = x.length;
+        if (n === 0) return NaN;
+        
+        const F = Array(n).fill(0).map(() => Array(n).fill(0));
+        for (let i = 0; i < n; i++) {
+            F[i][0] = y[i];
+        }
+
+        for (let j = 1; j < n; j++) {
+            for (let i = 0; i < n - j; i++) {
+                if (x[i+j] - x[i] === 0) { 
+                    console.warn("Newton Divided Differences: Repeated X-values found, interpolation might be unstable.");
+                    return NaN; 
+                }
+                F[i][j] = (F[i+1][j-1] - F[i][j-1]) / (x[i+j] - x[i]);
+            }
+        }
+
+        let result = F[0][0];
+        let productTerm = 1;
+        for (let j = 1; j < n; j++) {
+            productTerm *= (xi - x[j-1]);
+            result += F[0][j] * productTerm;
+        }
+        return result;
+    }
+
+
+    // --- Main Interpolation Function ---
+
+    function interpolar(app) {
+      const canvasId = {
+        clima: 'graficaClima',
+        economia: 'graficaEconomia',
+        ingenieria: 'graficaIngenieria'
+      }[app];
+      
+      const methodSelectId = {
+          clima: 'methodClima',
+          economia: 'methodEconomia',
+          ingenieria: 'methodIngenieria'
+      }[app];
+
+      const currentMethodLabelId = {
+          clima: 'currentMethodClima',
+          economia: 'currentMethodEconomia',
+          ingenieria: 'currentMethodIngenieria'
+      }[app];
+
+      const resultsTableContainerId = {
+          clima: 'resultsTableContainerClima',
+          economia: 'resultsTableContainerEconomia',
+          ingenieria: 'resultsTableContainerIngenieria'
+      }[app];
+
+
+      const selectedMethod = document.getElementById(methodSelectId).value;
+      const data = getDataFromForm(app); // Get data from new form inputs
+
+      // If getDataFromForm returned empty arrays due to validation, stop here
+      if (data.x.length === 0 || data.y.length === 0) {
+          return;
+      }
+
+      // Clear existing chart if it exists
+      if (charts[canvasId]) {
+          charts[canvasId].destroy();
+          charts[canvasId] = null;
+      }
+
+      const xi_chart = [], yi_chart = []; // Points for the chart
+      const min = Math.min(...data.x);
+      const max = Math.max(...data.x);
+      
+      if (min === max) {
+          alert('Los valores de X deben tener un rango para interpolar (no pueden ser todos iguales).');
+          return;
+      }
+      const stepsForChart = 50; // Number of interpolation points for the curve
+      const stepForChart = (max - min) / stepsForChart;
+
+      // Prepare interpolated points for the chart and table
+      const allPointsForTable = [];
+
+      // Add original points first to the table data array
+      data.x.forEach((xVal, i) => allPointsForTable.push({ x: xVal, y: data.y[i], type: 'Original' }));
+
+
+      for (let i = 0; i <= stepsForChart; i++) {
+        const val = min + i * stepForChart;
+        let interpolatedValue;
+
+        switch (selectedMethod) {
+            case 'lagrange':
+                interpolatedValue = lagrange(data.x, data.y, val);
+                break;
+            case 'newton':
+                interpolatedValue = newtonDividedDifferences(data.x, data.y, val);
+                if (isNaN(interpolatedValue)) { 
+                    // Consider giving a specific alert if Newton fails, but for now just let it show NaN
+                }
+                break;
+            case 'linear':
+                interpolatedValue = linearInterpolation(data.x, data.y, val);
+                break;
+            default:
+                interpolatedValue = lagrange(data.x, data.y, val); // Fallback
+        }
+        xi_chart.push(val);
+        yi_chart.push(interpolatedValue);
+        
+        // Add interpolated points to the table data array, only if not an original point
+        // Check if this interpolated point's X value is already an original X value
+        const isOriginalX = data.x.some(originalX => Math.abs(originalX - val) < 1e-9); // Use a small epsilon for float comparison
+        if (!isOriginalX) { 
+            allPointsForTable.push({ x: val, y: interpolatedValue, type: 'Interpolado' });
+        }
+      }
+
+      let xAxisLabel = '';
+      let yAxisLabel = '';
+      let chartTitle = '';
+      let methodDisplayName = '';
+      let xUnit = ''; // Unit for X axis
+      let yUnit = ''; // Unit for Y axis
+
+      switch (selectedMethod) {
+          case 'lagrange':
+              methodDisplayName = 'Interpolación de Lagrange';
+              break;
+          case 'newton':
+              methodDisplayName = 'Interpolación de Newton (Diferencias Divididas)';
+              break;
+          case 'linear':
+              methodDisplayName = 'Interpolación Lineal';
+              break;
+          default:
+              methodDisplayName = 'Interpolación'; 
+      }
+
+      // Set dynamic labels and titles based on the application
+      switch (app) {
+          case 'clima':
+              xAxisLabel = 'Tiempo'; xUnit = 'horas';
+              yAxisLabel = 'Temperatura'; yUnit = '°C';
+              chartTitle = `Predicción de Temperatura con ${methodDisplayName}`;
+              break;
+          case 'economia':
+              xAxisLabel = 'Año'; xUnit = ''; // Years usually don't have a unit suffix
+              yAxisLabel = 'Precio'; yUnit = '$';
+              chartTitle = `Proyección de Precios con ${methodDisplayName}`;
+              break;
+          case 'ingenieria':
+              xAxisLabel = 'Posición'; xUnit = 'm';
+              yAxisLabel = 'Temperatura'; yUnit = '°C';
+              chartTitle = `Sensorización: ${methodDisplayName} de Temperatura`;
+              break;
+      }
+
+      document.getElementById(currentMethodLabelId).textContent = `Método actual: ${methodDisplayName}`;
+
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      charts[canvasId] = new Chart(ctx, { // Store chart instance
+        type: 'line',
+        data: {
+          labels: xi_chart.map(val => val.toFixed(2)),
+          datasets: [
+            {
+              label: methodDisplayName,
+              data: yi_chart,
+              fill: false,
+              borderColor: '#6b63b5', /* Color para la línea principal del gráfico */
+              tension: (selectedMethod === 'linear') ? 0 : 0.2, 
+              pointRadius: 0 
+            },
+            {
+              label: 'Datos originales',
+              data: data.x.map((xVal, index) => ({ x: xVal, y: data.y[index] })),
+              borderColor: '#d9b8ff', /* Color para los puntos originales del gráfico */
+              backgroundColor: '#d9b8ff',
+              type: 'scatter',
+              pointRadius: 5,
+              pointHoverRadius: 7
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: '#555', /* Color de las etiquetas de la leyenda */
+                font: {
+                  family: 'Quicksand'
+                }
+              }
+            },
+            title: {
+              display: true,
+              text: chartTitle,
+              color: '#6b63b5', /* Color del título del gráfico */
+              font: {
+                family: 'Quicksand',
+                size: 18
+              }
+            }
+          },
+          animation: { duration: 1000, easing: 'easeOutQuart' },
+          scales: {
+            x: {
+              type: 'linear',
+              position: 'bottom',
+              title: {
+                display: true,
+                text: `${xAxisLabel} ${xUnit ? '(' + xUnit + ')' : ''}`, 
+                color: '#9999aa', /* Color del título del eje X */
+                font: {
+                  family: 'Quicksand'
+                }
+              },
+              ticks: {
+                color: '#9999aa', /* Color de los ticks del eje X */
+                font: {
+                  family: 'Quicksand'
+                }
+              },
+              grid: {
+                color: 'rgba(153, 153, 170, 0.1)' /* Líneas de la cuadrícula más claras */
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: `${yAxisLabel} ${yUnit ? '(' + yUnit + ')' : ''}`, 
+                color: '#9999aa', /* Color del título del eje Y */
+                font: {
+                  family: 'Quicksand'
+                }
+              },
+              ticks: {
+                color: '#9999aa', /* Color de los ticks del eje Y */
+                font: {
+                  family: 'Quicksand'
+                }
+              },
+              grid: {
+                color: 'rgba(153, 153, 170, 0.1)' /* Líneas de la cuadrícula más claras */
+              }
+            }
+          }
+        }
+      });
+
+      // --- Generate Results Table ---
+      const resultsTableContainer = document.getElementById(resultsTableContainerId);
+      resultsTableContainer.innerHTML = ''; // Clear previous table
+
+      let tableHtml = `<h4>Resultados de Interpolación (${methodDisplayName})</h4>`;
+      tableHtml += `<div class="scrollable-table-container">`; // Start scrollable container
+      tableHtml += `<table class="table results-table"><thead><tr>`;
+      tableHtml += `<th>Valor de ${xAxisLabel} ${xUnit ? '(' + xUnit + ')' : ''}</th><th>Valor Interpolado de ${yAxisLabel} ${yUnit ? '(' + yUnit + ')' : ''}</th><th>Tipo de Dato</th></tr></thead><tbody>`;
+
+      // Sort all points by X value for consistent display
+      allPointsForTable.sort((a, b) => a.x - b.x);
+
+      allPointsForTable.forEach(point => {
+          const rowClass = point.type === 'Original' ? 'original-data-row' : '';
+          tableHtml += `<tr class="${rowClass}"><td>${point.x.toFixed(4)}</td><td>${point.y.toFixed(4)}</td><td>${point.type}</td></tr>`;
+      });
+      
+      tableHtml += `</tbody></table></div>`; // End scrollable container and table
+      resultsTableContainer.innerHTML = tableHtml;
+      resultsTableContainer.classList.remove('d-none'); // Show the table container
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,354 @@
+
+    /* Definición de variables de color */
+    :root {
+      --lila-bebe: #cbc3e3;
+      --lila-claro: #d9d2f1;
+      --violeta-suave: #9f94d3;
+      --violeta-oscuro: #6b63b5;
+      --gris-claro: #f4f4f9;
+      --gris-medio: #9999aa;
+      --blanco: #ffffff;
+      --rosa-suave: #f8e6ff;
+      --rosa-claro: #f0d9ff;
+      --rosa-medio: #d9b8ff;
+      --verde-mint: #a9d5ba;
+    }
+
+    /* Estilos generales del cuerpo y contenedor */
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(135deg, var(--lila-claro), var(--rosa-suave));
+      color: #333; /* Texto principal oscuro para contrastar con fondos claros */
+      scroll-behavior: smooth;
+      line-height: 1.6;
+      margin: 0;
+      padding-bottom: 20px;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Quicksand', sans-serif; /* Usar Quicksand para todos los headings */
+      font-weight: 700;
+      color: var(--violeta-oscuro); /* Color principal de headings */
+      text-shadow: none; /* Eliminar sombra si no es necesaria con nuevos colores */
+    }
+
+    /* Estilos del encabezado */
+    header {
+      background: linear-gradient(135deg, var(--violeta-oscuro), var(--rosa-claro));
+      color: white;
+      text-align: center;
+      padding: 60px 20px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      color: var(--blanco); /* Blanco para el título principal */
+      text-shadow: none;
+    }
+
+    /* Estilos de la barra de navegación */
+    .navbar {
+      background: var(--blanco);
+      backdrop-filter: blur(12px);
+      border-radius: 25px;
+      margin-top: 20px;
+      padding: 0.6rem 2rem;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .nav-link {
+      font-weight: 600;
+      color: var(--violeta-oscuro); /* Color de enlaces de navegación */
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      transition: all 0.3s ease;
+      border-bottom: none; /* Eliminar borde inferior */
+    }
+
+    .navbar .nav-link:hover {
+      color: var(--rosa-medio); /* Color de hover de enlaces */
+      transform: scale(1.1); /* Efecto de escala al pasar el ratón */
+      text-shadow: none; /* Eliminar sombra de texto */
+    }
+
+    .navbar .nav-link i {
+      margin-right: 8px;
+      font-size: 1.1em;
+    }
+
+    /* Estilos de las secciones principales */
+    section {
+      background: var(--blanco); /* Fondo blanco para las secciones */
+      border-radius: 25px; /* Esquinas redondeadas */
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1); /* Sombra suave */
+      padding: 50px; /* Padding ajustado */
+      margin: 50px 0; /* Margen superior e inferior */
+      animation: fadeInUp 0.8s ease; /* Animación de entrada */
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      color: var(--violeta-oscuro); /* Color de los títulos de sección */
+      margin-bottom: 25px;
+    }
+
+    .lead {
+        color: #555; /* Un gris más oscuro para el texto lead */
+        font-size: 1.15rem;
+    }
+    
+    .method-label {
+        color: var(--violeta-oscuro); /* Un color más integrado para el label del método */
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+        display: block;
+    }
+
+    .conclusion-text {
+        color: #555; /* Un gris más oscuro para la conclusión */
+        font-size: 1.05rem;
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px dashed var(--violeta-suave); /* Borde punteado con color de la paleta */
+        line-height: 1.8;
+        background: none; /* Eliminar degradado de fondo */
+        padding-bottom: 1rem;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .conclusion-text strong {
+        color: var(--violeta-oscuro); /* Resaltar términos importantes con el color principal */
+    }
+
+    /* Estilos de los controles de formulario */
+    .form-control-custom { /* Renombrado de form-control-dark a form-control-custom */
+        background-color: var(--gris-claro); /* Fondo claro para inputs */
+        color: #333; /* Texto oscuro en inputs */
+        border: 1px solid var(--violeta-suave); /* Borde con color de la paleta */
+        box-shadow: none; /* Eliminar sombra si no es necesaria */
+        border-radius: 8px; /* Esquinas redondeadas */
+    }
+
+    .form-control-custom:focus {
+        background-color: var(--gris-claro); /* Fondo claro en focus */
+        color: #333;
+        border-color: var(--rosa-medio); /* Borde de focus con color de la paleta */
+        box-shadow: 0 0 5px rgba(217, 184, 255, 0.6); /* Sombra de focus */
+    }
+
+    .form-label {
+        color: #555; /* Color del label del formulario */
+    }
+
+    /* Estilos del canvas del gráfico */
+    canvas {
+        border: 2px solid var(--violeta-suave) !important; /* Borde del canvas con color de la paleta */
+        box-shadow: 0 0 15px rgba(107, 99, 181, 0.4); /* Sombra con color de la paleta */
+        background-color: var(--gris-claro); /* Fondo claro para gráficos */
+        margin-top: 1.5rem;
+        border-radius: 15px; /* Esquinas redondeadas para el canvas */
+    }
+
+    /* Estilos de los botones */
+    .btn {
+      border-radius: 50px; /* Botones redondeados */
+      font-weight: 600;
+      padding: 12px 24px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Sombra para todos los botones */
+    }
+
+    .btn-primary {
+      background: var(--violeta-oscuro); /* Color principal del botón */
+      border: none;
+      color: var(--blanco);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--rosa-medio); /* Color de hover del botón primario */
+      border-color: var(--rosa-medio);
+      color: var(--blanco);
+      transform: scale(1.05);
+      opacity: 0.92;
+    }
+
+    .btn-secondary-custom {
+        background-color: var(--gris-medio); /* Color gris para botones secundarios */
+        border-color: var(--gris-medio);
+        color: var(--blanco);
+        font-family: 'Quicksand', sans-serif; /* Fuente Quicksand para botones secundarios */
+    }
+
+    .btn-secondary-custom:hover {
+        background-color: var(--violeta-suave); /* Hover de secundario con violeta suave */
+        border-color: var(--violeta-suave);
+        color: var(--blanco);
+        transform: scale(1.05);
+        opacity: 0.92;
+    }
+
+    hr {
+        border-top: 1px dashed var(--violeta-suave); /* Separador con estilo punteado */
+        margin: 3rem 0;
+    }
+
+    /* Estilos del pie de página */
+    footer {
+        background: var(--violeta-oscuro); /* Fondo del footer con color principal */
+        color: white;
+        padding: 25px 10px;
+        text-align: center;
+        font-weight: 500;
+        box-shadow: 0 -4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Estilos de la tabla de resultados */
+    .results-table-container {
+        margin-top: 2rem;
+        background-color: var(--gris-claro); /* Fondo claro para el contenedor de la tabla */
+        border: 1px solid var(--violeta-suave); /* Borde con color de la paleta */
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 0 10px rgba(107, 99, 181, 0.3); /* Sombra con color de la paleta */
+    }
+
+    .results-table-container h4 {
+        color: var(--violeta-oscuro); /* Título de la tabla con color principal */
+        font-family: 'Quicksand', sans-serif;
+        margin-bottom: 1rem;
+        text-shadow: none;
+    }
+
+    .scrollable-table-container {
+        max-height: 300px;
+        overflow-y: auto;
+        border: 1px solid var(--gris-medio); /* Borde del scroll con gris medio */
+        border-radius: 5px;
+    }
+
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .results-table th, .results-table td {
+        border: 1px solid var(--lila-bebe); /* Bordes de celdas con lila bebe */
+        padding: 0.75rem;
+        text-align: center;
+        font-size: 0.9em;
+    }
+
+    .results-table th {
+        background-color: var(--violeta-oscuro); /* Fondo de encabezados de tabla */
+        color: var(--blanco); /* Texto blanco para encabezados */
+        font-family: 'Quicksand', sans-serif;
+        text-transform: uppercase;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    
+    .results-table td {
+        color: #333; /* Texto oscuro para celdas de tabla */
+        background-color: var(--blanco); /* Fondo blanco para celdas */
+    }
+
+    .results-table tr:nth-child(even) td {
+        background-color: var(--gris-claro); /* Fondo gris claro para filas pares */
+    }
+
+    .results-table tr:hover td {
+        background-color: var(--lila-claro); /* Fondo lila claro al pasar el ratón */
+    }
+    
+    .original-data-row td {
+        background-color: var(--rosa-claro) !important; /* Fondo rosa claro para datos originales */
+        color: var(--violeta-oscuro) !important; /* Texto violeta oscuro para resaltar */
+        font-weight: bold;
+    }
+    .original-data-row:hover td {
+        background-color: var(--rosa-medio) !important; /* Hover de rosa medio */
+    }
+
+    /* Estilos de los nuevos inputs del formulario */
+    .data-input-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+    .data-input-row .form-control-custom {
+        flex: 1;
+    }
+    .data-input-wrapper {
+        max-height: 250px;
+        overflow-y: auto;
+        padding-right: 10px;
+        margin-bottom: 15px;
+    }
+
+    /* Estilos específicos de la sección de teoría */
+    #theory-section {
+        border: 1px solid var(--violeta-suave); /* Borde con color de la paleta */
+        box-shadow: 0 0 20px rgba(107, 99, 181, 0.4); /* Sombra con color de la paleta */
+    }
+    #theory-section h2 {
+        color: var(--rosa-medio); /* Naranja para el título principal de teoría */
+        text-shadow: none;
+    }
+    #theory-section h3 {
+        color: var(--violeta-oscuro);
+    }
+    #theory-section p {
+        color: #555;
+    }
+    #theory-section ul li {
+        color: #333;
+    }
+    #theory-section ul li::before {
+        color: var(--violeta-oscuro); /* Icono con color de la paleta */
+    }
+    .video-link {
+        background-color: var(--violeta-oscuro); /* Fondo del enlace de video */
+        color: var(--blanco);
+        text-decoration: none;
+        border-radius: 5px;
+        font-family: 'Quicksand', sans-serif;
+        font-weight: 600;
+        font-size: 0.9em;
+        transition: background-color 0.3s ease;
+    }
+    .video-link:hover {
+        background-color: var(--rosa-medio); /* Hover del enlace de video */
+        color: var(--blanco);
+    }
+
+    /* Estilos del formulario de contacto */
+    #contact-form-section {
+        border: 1px solid var(--violeta-suave);
+        box-shadow: 0 0 20px rgba(107, 99, 181, 0.4);
+    }
+    #contact-form-section h2 {
+        color: var(--violeta-oscuro);
+    }
+    #contact-form-section .form-label {
+        color: #555;
+    }
+    #contact-form-section .btn-primary {
+        background-color: var(--violeta-oscuro); /* Botón de enviar con color principal */
+        border-color: var(--violeta-oscuro);
+        color: var(--blanco);
+    }
+    #contact-form-section .btn-primary:hover {
+        background-color: var(--rosa-medio); /* Hover del botón de enviar */
+        border-color: var(--rosa-medio);
+    }
